@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
+import random
 
 app = Flask(__name__)
 
@@ -9,7 +10,8 @@ import os
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-    
+    from flask import Flask, render_template, request, redirect, url_for
+
 # Database setup
 def init_db():
     conn = sqlite3.connect('survey.db')
@@ -38,8 +40,8 @@ article_pairs = [
 
 @app.route('/')
 def survey():
-    # Select a random article pair
-    article1, article2 = article_pairs[0]  # For simplicity, we use the first pair here
+    # Select a random article pair from the list
+    article1, article2 = random.choice(article_pairs)  # Randomly select a pair
     return render_template('survey.html', article1=article1, article2=article2)
 
 @app.route('/submit', methods=['POST'])
@@ -61,7 +63,7 @@ def submit():
 
 @app.route('/thank_you')
 def thank_you():
-    return "<h1>Thank you for participating!</h1>"
+    return render_template('thank_you.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
