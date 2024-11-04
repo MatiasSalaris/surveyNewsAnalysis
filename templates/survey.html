@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Influence Survey</title>
+</head>
+<body>
+    <h1>Could the first article have influenced the second?</h1>
+
+    <div>
+        <h2>Article 1</h2>
+        <p>{{ article1 }}</p>
+    </div>
+    <div>
+        <h2>Article 2</h2>
+        <p>{{ article2 }}</p>
+    </div>
+
+    <form action="/submit" method="POST">
+        <input type="hidden" name="article1" value="{{ article1 }}">
+        <input type="hidden" name="article2" value="{{ article2 }}">
+
+        <label>
+            <input type="radio" name="response" value="yes" required>
+            Yes
+        </label>
+        <label>
+            <input type="radio" name="response" value="no" required>
+            No
+        </label>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
