@@ -4,33 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article Influence Survey</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin-top: 40px;
+        }
+        .container {
+            max-width: 700px;
+        }
+        .article-box {
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Could the first article have influenced the second?</h1>
+    <div class="container">
+        <h1 class="text-center mb-4">Article Influence Survey</h1>
+        
+        <p class="question text-center">Could the first article have influenced the second?</p>
 
-    <div>
-        <h2>Article 1</h2>
-        <p>{{ article1 }}</p>
+        <!-- Article 1 Box -->
+        <div class="article-box">
+            <h5 class="text-primary">Article 1</h5>
+            <p>{{ article1 }}</p>
+        </div>
+
+        <!-- Article 2 Box -->
+        <div class="article-box">
+            <h5 class="text-success">Article 2</h5>
+            <p>{{ article2 }}</p>
+        </div>
+
+        <!-- Survey Form -->
+        <form action="/submit" method="POST" class="text-center">
+            <input type="hidden" name="article1" value="{{ article1 }}">
+            <input type="hidden" name="article2" value="{{ article2 }}">
+
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="yesOption" name="response" value="yes" class="custom-control-input" required>
+                    <label class="custom-control-label" for="yesOption">Yes</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="noOption" name="response" value="no" class="custom-control-input" required>
+                    <label class="custom-control-label" for="noOption">No</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </form>
     </div>
-    <div>
-        <h2>Article 2</h2>
-        <p>{{ article2 }}</p>
-    </div>
 
-    <form action="/submit" method="POST">
-        <input type="hidden" name="article1" value="{{ article1 }}">
-        <input type="hidden" name="article2" value="{{ article2 }}">
-
-        <label>
-            <input type="radio" name="response" value="yes" required>
-            Yes
-        </label>
-        <label>
-            <input type="radio" name="response" value="no" required>
-            No
-        </label>
-
-        <button type="submit">Submit</button>
-    </form>
+    <!-- Optional JavaScript and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
