@@ -1,4 +1,52 @@
-<!-- First Question -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Influence Survey</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin-top: 40px;
+        }
+        .container {
+            max-width: 700px;
+        }
+        .article-box {
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Article Influence Survey</h1>
+        
+        <!-- Article 1 Box -->
+        <div class="article-box">
+            <h5 class="text-primary">Article 1</h5>
+            <p>{{ article1 }}</p>
+        </div>
+        <!-- Article 2 Box -->
+        <div class="article-box">
+            <h5 class="text-success">Article 2</h5>
+            <p>{{ article2 }}</p>
+        </div>
+        <!-- Survey Form -->
+        <form action="/submit" method="POST" class="text-center">
+            <input type="hidden" name="article1" value="{{ article1 }}">
+            <input type="hidden" name="article2" value="{{ article2 }}">
+            <!-- First Question -->
 <div class="form-group">
     <p class="question">Pensi che il primo articolo possa essere stato usato come fonte per il secondo?</p>
     <div class="custom-control custom-radio custom-control-inline">
@@ -23,3 +71,11 @@
         <label class="custom-control-label" for="argumentNo">No</label>
     </div>
 </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </form>
+        
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
