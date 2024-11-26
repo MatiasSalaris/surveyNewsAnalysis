@@ -1,87 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Influence Survey</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            margin-top: 40px;
-        }
-        .container {
-            max-width: 700px;
-        }
-        .article-box {
-            padding: 15px;
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .question {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-center mb-4">Article Influence Survey</h1>
-        
-        <!-- First Question -->
-        <p class="question text-center">Pensi che il primo articolo possa essere stato usato come fonte per il secondo?</p>
+<form action="/submit" method="POST" class="text-center">
+    <input type="hidden" name="article1" value="{{ article1 }}">
+    <input type="hidden" name="article2" value="{{ article2 }}">
 
-        <!-- Article 1 Box -->
-        <div class="article-box">
-            <h5 class="text-primary">Article 1</h5>
-            <p>{{ article1 }}</p>
+    <!-- First Question -->
+    <div class="form-group">
+        <p class="question">Do you think the first article could have been used as a source for the second?</p>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="sourceYesOption" name="response_source" value="yes" class="custom-control-input" required>
+            <label class="custom-control-label" for="sourceYesOption">Yes</label>
         </div>
-
-        <!-- Article 2 Box -->
-        <div class="article-box">
-            <h5 class="text-success">Article 2</h5>
-            <p>{{ article2 }}</p>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="sourceNoOption" name="response_source" value="no" class="custom-control-input" required>
+            <label class="custom-control-label" for="sourceNoOption">No</label>
         </div>
-
-        <!-- Survey Form -->
-        <form action="/submit" method="POST" class="text-center">
-            <input type="hidden" name="article1" value="{{ article1 }}">
-            <input type="hidden" name="article2" value="{{ article2 }}">
-
-            <!-- First Question Response -->
-            <div class="form-group">
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="yesOption" name="response_source" value="Yes" class="custom-control-input" required>
-                    <label class="custom-control-label" for="yesOption">Yes</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="noOption" name="response_source" value="No" class="custom-control-input" required>
-                    <label class="custom-control-label" for="noOption">No</label>
-                </div>
-            </div>
-
-            <!-- Second Question -->
-            <p class="question">Parlano dello stesso argomento?</p>
-            <div class="form-group">
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="sameArgYes" name="response_argument" value="Yes" class="custom-control-input" required>
-                    <label class="custom-control-label" for="sameArgYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="sameArgNo" name="response_argument" value="No" class="custom-control-input" required>
-                    <label class="custom-control-label" for="sameArgNo">No</label>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-        </form>
     </div>
 
-    <!-- Optional JavaScript and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Second Question -->
+    <div class="form-group">
+        <p class="question">Do these articles discuss the same argument?</p>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="sameArgumentYesOption" name="response_argument" value="yes" class="custom-control-input" required>
+            <label class="custom-control-label" for="sameArgumentYesOption">Yes</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="sameArgumentNoOption" name="response_argument" value="no" class="custom-control-input" required>
+            <label class="custom-control-label" for="sameArgumentNoOption">No</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</form>
