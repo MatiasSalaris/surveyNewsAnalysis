@@ -39,6 +39,7 @@ def init_db():
             timestamp TIMESTAMP NOT NULL
         )
     ''')
+    print("committed")
     conn.commit()
     cursor.close()
     conn.close()
@@ -78,10 +79,10 @@ def submit():
             'INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) VALUES (%s, %s, %s, %s, %s)',
             (article1, article2, response_source, response_argument, timestamp)
         )
-        
+        print(f"Executing query: INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) VALUES ({article1}, {article2}, {response_source}, {response_argument}, {timestamp})")
         # Commit changes to the database
         conn.commit()
-        
+        print("Committed")
         # Close the cursor and connection properly
         cursor.close()
         conn.close()
