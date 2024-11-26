@@ -65,7 +65,7 @@ def submit():
 
     # Save response to the database
     try:
-        conn = psycopg2.connect(get_db_connection_url())
+        conn = psycopg2.connect(get_db_connection())
         cursor = conn.cursor()
         cursor.execute(
             'INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) VALUES (%s, %s, %s, %s, %s)',
