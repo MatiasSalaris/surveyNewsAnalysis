@@ -11,12 +11,14 @@ app = Flask(__name__)
 def init_db():
     conn = sqlite3.connect('survey.db')
     cursor = conn.cursor()
+    # Create table with two response columns
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS responses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             article1 TEXT NOT NULL,
             article2 TEXT NOT NULL,
-            response TEXT NOT NULL,
+            response_source TEXT NOT NULL,
+            response_argument TEXT NOT NULL,
             timestamp TEXT NOT NULL
         )
     ''')
@@ -46,14 +48,17 @@ def survey():
 def submit():
     article1 = request.form['article1']
     article2 = request.form['article2']
-    response = request.form['response']
+    response_source = request.form.get('response_source')
+    response_argument = request.form.get('response_argument')
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     # Save response to the database
     conn = sqlite3.connect('survey.db')
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO responses (article1, article2, response, timestamp) VALUES (?, ?, ?, ?)',
-                   (article1, article2, response, timestamp))
+    cursor.execute('''
+        INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) 
+        VALUES (?, ?, ?, ?, ?)
+    ''', (article1, article2, response_source, response_argument, timestamp))
     conn.commit()
     conn.close()
     
