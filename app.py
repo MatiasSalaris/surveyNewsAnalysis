@@ -1,24 +1,29 @@
 import psycopg2
-from psycopg2 import sql
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 import random
 import json
 import os
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# Database connection setup
+# Parse DATABASE_URL for connection details
 def get_db_connection():
+    db_url = os.environ.get("DATABASE_URL")
+    if not db_url:
+        raise RuntimeError("DATABASE_URL environment variable not set")
+
+    result = urlparse(db_url)
     return psycopg2.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT", 5432)
+        dbname=result.path[1:],
+        user=result.username,
+        password=result.password,
+        host=result.hostname,
+        port=result.port
     )
 
-# Initialize the database table
+# Initialize the database
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -36,15 +41,7 @@ def init_db():
     cursor.close()
     conn.close()
 
-# Call this during app initialization
 init_db()
-
-# Load article pairs from JSON file
-def load_article_pairs(filename='article_pairs.json'):
-    with open(filename, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-article_pairs = load_article_pairs()
 
 @app.route('/')
 def survey():
