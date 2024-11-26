@@ -7,6 +7,13 @@ import os
 from urllib.parse import urlparse
 
 app = Flask(__name__)
+# Load article pairs from JSON file
+def load_article_pairs(filename='article_pairs.json'):
+    with open(filename, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+# Global variable to store the article pairs
+article_pairs = load_article_pairs()
 
 # Parse DATABASE_URL for connection details
 def get_db_connection():
