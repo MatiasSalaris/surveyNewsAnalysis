@@ -1,5 +1,6 @@
+import psycopg2
+from psycopg2 import sql
 from flask import Flask, render_template, request, redirect, url_for
-import sqlite3
 from datetime import datetime
 import random
 import json
@@ -7,25 +8,35 @@ import os
 
 app = Flask(__name__)
 
-# Database setup
+# Database connection setup
+def get_db_connection():
+    return psycopg2.connect(
+        host=os.environ.get("DB_HOST"),
+        database=os.environ.get("DB_NAME"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        port=os.environ.get("DB_PORT", 5432)
+    )
+
+# Initialize the database table
 def init_db():
-    conn = sqlite3.connect('survey.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
-    # Create table with two response columns
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS responses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             article1 TEXT NOT NULL,
             article2 TEXT NOT NULL,
             response_source TEXT NOT NULL,
             response_argument TEXT NOT NULL,
-            timestamp TEXT NOT NULL
+            timestamp TIMESTAMP NOT NULL
         )
     ''')
     conn.commit()
+    cursor.close()
     conn.close()
 
-# Initialize the database
+# Call this during app initialization
 init_db()
 
 # Load article pairs from JSON file
@@ -33,35 +44,34 @@ def load_article_pairs(filename='article_pairs.json'):
     with open(filename, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-# Sample data: pairs of articles (article1, article2)
 article_pairs = load_article_pairs()
 
 @app.route('/')
 def survey():
-    # Select a random article pair from the list
-    selected_pair = random.choice(article_pairs)  # Randomly select a pair
-    article1 = selected_pair['article1']
-    article2 = selected_pair['article2']
-    return render_template('survey.html', article1=article1, article2=article2)
+    selected_pair = random.choice(article_pairs)
+    return render_template('survey.html', article1=selected_pair['article1'], article2=selected_pair['article2'])
 
 @app.route('/submit', methods=['POST'])
 def submit():
     article1 = request.form['article1']
     article2 = request.form['article2']
-    response_source = request.form.get('response_source')
-    response_argument = request.form.get('response_argument')
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
-    # Save response to the database
-    conn = sqlite3.connect('survey.db')
+    response_source = request.form['response_source']
+    response_argument = request.form['response_argument']
+    timestamp = datetime.now()
+
+    conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) 
-        VALUES (?, ?, ?, ?, ?)
-    ''', (article1, article2, response_source, response_argument, timestamp))
+    cursor.execute(
+        '''
+        INSERT INTO responses (article1, article2, response_source, response_argument, timestamp)
+        VALUES (%s, %s, %s, %s, %s)
+        ''',
+        (article1, article2, response_source, response_argument, timestamp)
+    )
     conn.commit()
+    cursor.close()
     conn.close()
-    
+
     return redirect(url_for('thank_you'))
 
 @app.route('/thank_you')
