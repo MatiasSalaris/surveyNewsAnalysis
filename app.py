@@ -47,6 +47,14 @@ init_db()
 def survey():
     selected_pair = random.choice(article_pairs)
     return render_template('survey.html', article1=selected_pair['article1'], article2=selected_pair['article2'])
+
+@app.route('/thank_you')
+def thank_you():
+    return render_template('thank_you.html')
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
+    
 @app.route('/submit', methods=['POST'])
 def submit():
     article1 = request.form['article1']
@@ -56,33 +64,37 @@ def submit():
     response_source = request.form['response_source'] == 'True'
     response_argument = request.form['response_argument'] == 'True'
     
-    # Debug: Print the parsed boolean responses
-    print(f"Response Source: {response_source}")
-    print(f"Response Argument: {response_argument}")
-    
     # Get timestamp for when the response was submitted
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Save response to the database
     try:
-        conn = psycopg2.connect(get_db_connection())
-        cursor = conn.cursor()
+        # Get the database connection
+        conn = get_db_connection()  # This gets a valid connection object
+        cursor = conn.cursor()  # Create cursor from connection
+        
+        # Now execute the query using the connection and cursor
         cursor.execute(
             'INSERT INTO responses (article1, article2, response_source, response_argument, timestamp) VALUES (%s, %s, %s, %s, %s)',
             (article1, article2, response_source, response_argument, timestamp)
         )
+        
+        # Commit changes to the database
         conn.commit()
+        
+        # Close the cursor and connection properly
+        cursor.close()
         conn.close()
+        
+        # Redirect to thank you page
         return redirect(url_for('thank_you'))
+    
     except Exception as e:
         print(f"Error saving to database: {e}")
         return f"Error saving to database: {e}", 500
-@app.route('/thank_you')
-def thank_you():
-    return render_template('thank_you.html')
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+
+        
+
 
 
 
