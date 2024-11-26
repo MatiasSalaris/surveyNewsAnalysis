@@ -31,6 +31,7 @@
     <div class="container">
         <h1 class="text-center mb-4">Article Influence Survey</h1>
         
+        <!-- First Question -->
         <p class="question text-center">Pensi che il primo articolo possa essere stato usato come fonte per il secondo?</p>
 
         <!-- Article 1 Box -->
@@ -50,14 +51,28 @@
             <input type="hidden" name="article1" value="{{ article1 }}">
             <input type="hidden" name="article2" value="{{ article2 }}">
 
+            <!-- First Question Response -->
             <div class="form-group">
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="yesOption" name="response" value="yes" class="custom-control-input" required>
+                    <input type="radio" id="yesOption" name="response_source" value="Yes" class="custom-control-input" required>
                     <label class="custom-control-label" for="yesOption">Yes</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="noOption" name="response" value="no" class="custom-control-input" required>
+                    <input type="radio" id="noOption" name="response_source" value="No" class="custom-control-input" required>
                     <label class="custom-control-label" for="noOption">No</label>
+                </div>
+            </div>
+
+            <!-- Second Question -->
+            <p class="question">Parlano dello stesso argomento?</p>
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="sameArgYes" name="response_argument" value="Yes" class="custom-control-input" required>
+                    <label class="custom-control-label" for="sameArgYes">Yes</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="sameArgNo" name="response_argument" value="No" class="custom-control-input" required>
+                    <label class="custom-control-label" for="sameArgNo">No</label>
                 </div>
             </div>
 
