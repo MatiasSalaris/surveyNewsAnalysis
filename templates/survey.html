@@ -24,6 +24,7 @@
         .question {
             font-weight: bold;
             font-size: 1.2em;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -31,9 +32,6 @@
     <div class="container">
         <h1 class="text-center mb-4">Article Influence Survey</h1>
         
-        <!-- First Question -->
-        <p class="question text-center">Pensi che il primo articolo possa essere stato usato come fonte per il secondo?</p>
-
         <!-- Article 1 Box -->
         <div class="article-box">
             <h5 class="text-primary">Article 1</h5>
@@ -51,7 +49,8 @@
             <input type="hidden" name="article1" value="{{ article1 }}">
             <input type="hidden" name="article2" value="{{ article2 }}">
 
-            <!-- First Question Response -->
+            <!-- First Question -->
+            <p class="question">Pensi che il primo articolo possa essere stato usato come fonte per il secondo?</p>
             <div class="form-group">
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="yesOption" name="response_source" value="Yes" class="custom-control-input" required>
