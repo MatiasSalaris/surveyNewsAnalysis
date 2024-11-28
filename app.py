@@ -10,8 +10,15 @@ app = Flask(__name__)
 
 # Load article pairs from JSON file
 def load_article_pairs(filename='article_pairs.json'):
-    with open(filename, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Error: {filename} not found.")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON in {filename}: {e}")
+        return []
 
 # Global variable to store the article pairs
 article_pairs = load_article_pairs()
@@ -32,47 +39,52 @@ def get_db_connection():
 
 # Initialize the database
 def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS responses (
-            id SERIAL PRIMARY KEY,
-            index INTEGER NOT NULL,
-            current_content TEXT NOT NULL,
-            target_content TEXT NOT NULL,
-            response_source BOOLEAN NOT NULL,
-            response_argument BOOLEAN NOT NULL,
-            timestamp TIMESTAMP NOT NULL
-        )
-    ''')
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS responses (
+                id SERIAL PRIMARY KEY,
+                index INTEGER NOT NULL,
+                current_content TEXT NOT NULL,
+                target_content TEXT NOT NULL,
+                response_source BOOLEAN NOT NULL,
+                response_argument BOOLEAN NOT NULL,
+                timestamp TIMESTAMP NOT NULL
+            )
+        ''')
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error initializing database: {e}")
 
+# Initialize the database on app startup
 init_db()
 
 @app.route('/')
 def survey():
+    if not article_pairs:
+        return "No article pairs available. Please check the JSON file.", 500
+
     selected_pair = random.choice(article_pairs)
     return render_template(
         'survey.html',
-        index=selected_pair['index']
+        index=selected_pair['index'],
         current_content=selected_pair['current_content'],
         target_content=selected_pair['target_content'],
     )
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    index = int(request.form['index'])
-    current_content = request.form['current_content']
-    target_content = request.form['target_content']
-      # Convert index to integer
-
-    response_source = request.form['response_source'] == 'True'
-    response_argument = request.form['response_argument'] == 'True'
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
     try:
+        index = int(request.form['index'])  # Convert index to integer
+        current_content = request.form['current_content']
+        target_content = request.form['target_content']
+        response_source = request.form['response_source'] == 'True'
+        response_argument = request.form['response_argument'] == 'True'
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
