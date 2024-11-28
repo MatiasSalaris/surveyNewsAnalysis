@@ -57,8 +57,8 @@ def survey():
     return render_template(
         'survey.html',
         index=selected_pair['index']
-        article1=selected_pair['current_content'],
-        article2=selected_pair['target_content'],
+        current_content=selected_pair['current_content'],
+        target_content=selected_pair['target_content'],
     )
 
 @app.route('/submit', methods=['POST'])
