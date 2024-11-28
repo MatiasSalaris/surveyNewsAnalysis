@@ -44,9 +44,9 @@
         </div>
         <!-- Survey Form -->
         <form action="/submit" method="POST" class="text-center">
-            <input type="hidden" name="article1" value="{{ article1 }}">
-            <input type="hidden" name="article2" value="{{ article2 }}">
             <input type="hidden" name="index" value="{{ index }}">
+            <input type="hidden" name="article1" value="{{ target_content }}">
+            <input type="hidden" name="article2" value="{{ current_content }}">
             <!-- First Question -->
 <div class="form-group">
     <p class="question">Sapendo che è stato pubblicato almeno 8 ore prima del secondo, pensi che il primo articolo possa essere stato usato come fonte o come ispirazione per il secondo?</p>
