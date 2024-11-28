@@ -37,9 +37,9 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS responses (
             id SERIAL PRIMARY KEY,
-            article1 TEXT NOT NULL,
-            article2 TEXT NOT NULL,
-            article_index INTEGER NOT NULL,
+            index INTEGER NOT NULL,
+            current_content TEXT NOT NULL,
+            target_content TEXT NOT NULL,
             response_source BOOLEAN NOT NULL,
             response_argument BOOLEAN NOT NULL,
             timestamp TIMESTAMP NOT NULL
@@ -56,16 +56,17 @@ def survey():
     selected_pair = random.choice(article_pairs)
     return render_template(
         'survey.html',
-        article1=selected_pair['article1'],
-        article2=selected_pair['article2'],
         index=selected_pair['index']
+        article1=selected_pair['current_content'],
+        article2=selected_pair['target_content'],
     )
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    article1 = request.form['article1']
-    article2 = request.form['article2']
-    index = int(request.form['index'])  # Convert index to integer
+    index = int(request.form['index'])
+    current_content = request.form['current_content']
+    target_content = request.form['target_content']
+      # Convert index to integer
 
     response_source = request.form['response_source'] == 'True'
     response_argument = request.form['response_argument'] == 'True'
@@ -76,10 +77,10 @@ def submit():
         cursor = conn.cursor()
         cursor.execute(
             '''
-            INSERT INTO responses (article1, article2, article_index, response_source, response_argument, timestamp)
+            INSERT INTO responses (index, current_content, target_content, response_source, response_argument, timestamp)
             VALUES (%s, %s, %s, %s, %s, %s)
             ''',
-            (article1, article2, index, response_source, response_argument, timestamp)
+            (index, current_content, target_content, response_source, response_argument, timestamp)
         )
         conn.commit()
         cursor.close()
