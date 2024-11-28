@@ -45,7 +45,7 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS responses (
                 id SERIAL PRIMARY KEY,
-                index INTEGER NOT NULL,
+                content_index  INTEGER NOT NULL,
                 current_content TEXT NOT NULL,
                 target_content TEXT NOT NULL,
                 response_source BOOLEAN NOT NULL,
@@ -70,7 +70,7 @@ def survey():
     selected_pair = random.choice(article_pairs)
     return render_template(
         'survey.html',
-        index=selected_pair['index'],
+        content_index =selected_pair['content_index '],
         current_content=selected_pair['current_content'],
         target_content=selected_pair['target_content'],
     )
@@ -78,7 +78,7 @@ def survey():
 @app.route('/submit', methods=['POST'])
 def submit():
     try:
-        index = int(request.form['index'])  # Convert index to integer
+        content_index  = int(request.form['content_index '])  # Convert content_index  to integer
         current_content = request.form['current_content']
         target_content = request.form['target_content']
         response_source = request.form['response_source'] == 'True'
@@ -89,10 +89,10 @@ def submit():
         cursor = conn.cursor()
         cursor.execute(
             '''
-            INSERT INTO responses (index, current_content, target_content, response_source, response_argument, timestamp)
+            INSERT INTO responses (content_index , current_content, target_content, response_source, response_argument, timestamp)
             VALUES (%s, %s, %s, %s, %s, %s)
             ''',
-            (index, current_content, target_content, response_source, response_argument, timestamp)
+            (content_index , current_content, target_content, response_source, response_argument, timestamp)
         )
         conn.commit()
         cursor.close()
