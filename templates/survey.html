@@ -26,46 +26,31 @@
             font-size: 1.2em;
             margin-top: 20px;
         }
-        .instruction-box {
-            background-color: #f1f1f1;
-            border-left: 5px solid #007bff;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center mb-4">Article Influence Survey</h1>
         
-        <!-- Instruction Box -->
-        <div class="instruction-box">
-            <p><strong>Per favore, leggi attentamente i due articoli sottostanti e rispondi alle due domande che seguiranno.</strong></p>
-            <p>Ti chiediamo di leggere attentamente il contenuto dei due articoli e di rispondere alle domande anche nel caso non siate sicuri della risposta</p>
-        </div>
-
         <!-- Article 1 Box -->
         <div class="article-box">
             <h5 class="text-primary">Article 1</h5>
-            <p>{{ current_content }}</p>
+            <p>{{ target_content }}</p>
         </div>
-
         <!-- Article 2 Box -->
         <div class="article-box">
             <h5 class="text-success">Article 2</h5>
-            <p>{{ target_content }}</p>
+            <p>{{ current_content }}</p>
         </div>
-
         <!-- Survey Form -->
         <form action="/submit" method="POST" class="text-center">
-            <input type="hidden" name="index" value="{{ index }}">
+            <input type="hidden" name="content_index " value="{{ content_index  }}">
             <input type="hidden" name="current_content" value="{{ current_content }}">
             <input type="hidden" name="target_content" value="{{ target_content }}">
 
             <!-- First Question -->
             <div class="form-group">
-                <p class="question">Sapendo che è stato pubblicato almeno 8 ore prima del secondo, pensi che il primo articolo possa essere stato usato come fonte o come ispirazione per il secondo?</p>
+                <p class="question">Considerando che il primo articolo è stato pubblicato almeno 8 ore prima del secondo, pensi che possa essere stato utilizzato come fonte o ispirazione per il secondo?</p>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="sourceYes" name="response_source" value="True" class="custom-control-input" required>
                     <label class="custom-control-label" for="sourceYes">Yes</label>
